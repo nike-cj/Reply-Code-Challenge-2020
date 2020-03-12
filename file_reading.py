@@ -79,6 +79,8 @@ path_output: Path = Path.cwd()
 floor: OfficeFloor
 developers: List[Developer]
 dev_per_company: Dict[str, List[Developer]]
+dev_by_bonus: List[Developer]
+dev_by_num_skills: List[Developer]
 managers: List[ProjectManager]
 
 
@@ -112,7 +114,10 @@ def read(path_input: Path):
 				char: str = file.read(1)
 				seat = SeatType(char)
 				seatobj = Seat(seat)
-				floor.seats[line][column] = seatobj  # is_filled initialized as empty
+				try:
+					floor.seats[line][column] = seatobj  # is_filled initialized as empty
+				except Exception as e:
+					print(str(e))
 			file.read(1)  # discard \n
 
 		# ----- developers -----
@@ -167,3 +172,26 @@ def read(path_input: Path):
 			key: str = entry[0]
 			value: List[Developer] = entry[1]
 			value.sort(key=lambda x: x.bonus)
+		
+		global dev_by_bonus, dev_by_num_skills
+		dev_by_bonus = developers.copy()
+		dev_by_bonus.sort(key=lambda x: x.bonus)
+		
+		dev_by_num_skills = developers.copy()
+		dev_by_num_skills.sort(key=lambda x: x.skill_size)
+		
+
+
+def write(path_output: Path):
+	# check input type
+	if type(path_output) == str:
+		path_output = Path(path_output)
+	
+	# open file
+	with path_input.open('w') as file:
+		# iterate over developers
+		for dev in developers:
+			if dev.seat_column == -1 and dev.seat_line == -1:
+				file.writelines(f'X\n')
+			else:
+				file.writelines(f'{dev.seat_colimn} {dev.seat_line}\n')

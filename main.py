@@ -47,7 +47,7 @@ def pickInitialDeveloper():
 				return d
 
 def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
-	if lastDev == None:
+	if lastDev is None:
 		# Call function to pick first developer
 		dev: file_reading.Developer = pickInitialDeveloper()
 	else:
