@@ -2,7 +2,6 @@
 #  libraries
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 # ----- standard libraries ---------------------------------------------------------------------------------------------
-from dataclasses import dataclass
 from pathlib import Path
 import json
 import sys
@@ -31,7 +30,6 @@ class SeatType(Enum):
 # ______________________________________________________________________________________________________________________
 #  classes
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-#@dataclass
 class Developer(object):
 	company: str
 	bonus: list
@@ -40,28 +38,26 @@ class Developer(object):
 	seat_line: int
 	seat_column: int
 	
-	def __init__(self, width: int = -1, height: int = -1, seats: List[List[Tuple[SeatType, bool]]] = [[]]):
-		self.width = width
-		self.height = height
-		self.seats = seats
+	# def __init__(self, width: int = -1, height: int = -1, seats: List[List[Tuple[SeatType, bool]]] = [[]]):
+	# 	self.width = width
+	# 	self.height = height
+	# 	self.seats = seats
 	
-#@dataclass
 class ProjectManager(object):
 	company: str
 	bonus: list
 	seat_line: int
 	seat_column: int
 	
-#@dataclass
 class OfficeFloor(object):
 	width: int
 	height: int
 	seats: List[List[Tuple[SeatType, bool]]]  # matrix where each cell is a pair (type, is_filled)
 	
-	def __init__(self, width: int = -1, height: int = -1, seats: List[List[Tuple[SeatType, bool]]] = [[]]):
-		self.width = width
-		self.height = height
-		self.seats = seats
+	# def __init__(self, width: int = -1, height: int = -1, seats: List[List[Tuple[SeatType, bool]]] = [[]]):
+	# 	self.width = width
+	# 	self.height = height
+	# 	self.seats = seats
 
 
 # ______________________________________________________________________________________________________________________
@@ -113,12 +109,12 @@ def read(path_input: Path):
 		#----- developers -----
 		# read dev number
 		dev_num = int(file.readline())
-		developers = [None] * dev_num
+		developers = []
 		dev_per_company = {}
 		
 		# read developer details
 		for i in range(0, dev_num):
-			line: str = file.readline()
+			line: str = file.readline().strip()
 			fields: list = line.split(' ')
 			
 			dev: Developer = Developer()
@@ -127,10 +123,10 @@ def read(path_input: Path):
 			dev.seat_line = -1  # initialized as invalid index
 			dev.seat_column = -1  # initialized as invalid index
 			
-			skill_size: int = int(fields[2])
-			dev.skills = [None] * skill_size
-			for j in range(0, skill_size):
-				dev.skills.append(fields[i+j])
+			dev.skill_size = int(fields[2])
+			dev.skills = [None] * dev.skill_size
+			for j in range(0, dev.skill_size):
+				dev.skills.append(fields[3+j])
 			
 			# insert developer in database
 			developers.append(dev)
