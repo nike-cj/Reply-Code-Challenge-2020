@@ -2,17 +2,17 @@
 #  libraries
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 # ----- standard libraries ---------------------------------------------------------------------------------------------
-from dataclasses import dataclass
+import getopt
 from pathlib import Path
 import json
 import sys
-import math
 
 from typing import List, Tuple
 from enum import Enum
 
 # ----- custom libraries -----------------------------------------------------------------------------------------------
-# import util
+import file_reading
+import utils
 
 # ______________________________________________________________________________________________________________________
 #  constants
@@ -47,8 +47,27 @@ from enum import Enum
 #  main function
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 
-def main():
-	# ----- section to complete ----------------------------------------------------------------------------------------
+def main(argv):
+	# ----- read command line arguments --------------------------------------------------------------------------------
+	inputfile: str = 'input/a.txt'
+	outputfile: str = 'output/a.txt'
+	try:
+		opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
+	except getopt.GetoptError:
+		print('main.py -i <inputfile> -o <outputfile>')
+		sys.exit(2)
+	for opt, arg in opts:
+		if opt == '-h':
+			print('main.py -i <inputfile> -o <outputfile>')
+			sys.exit()
+		elif opt in ("-i", "--ifile"):
+			inputfile = arg
+		elif opt in ("-o", "--ofile"):
+			outputfile = arg
+	print(f'Input file is {inputfile}')
+	print(f'Output file is {outputfile}')
+
+	# ----- feed  --------------------------------------------------------------------------------
 	pass
 
 
@@ -57,7 +76,7 @@ def main():
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 if __name__ == '__main__':
 	try:
-		main()
+		main(sys.argv[1:])
 	except Exception as e:
 		print(str(e))
 	exit(0)
