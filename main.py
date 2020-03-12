@@ -42,9 +42,15 @@ from utils import *
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 
 def pickInitialDeveloper():
-		for d in file_reading.developers:
-			if d.seat_line == -1:
-				return d
+	for d in file_reading.dev_by_bonus:
+		if d.seat_line == -1:
+			return d
+
+def pickNextDeveloper(dev: file_reading.Developer):
+	for v in file_reading.dev_per_company[dev.company]:
+		if v.seat_line == -1:
+			return v
+	return pickInitialDeveloper()
 
 def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 	if lastDev is None:
@@ -52,10 +58,10 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 		dev: file_reading.Developer = pickInitialDeveloper()
 	else:
 		# Call function to pick next developer
-		dev: file_reading.Developer = file_reading.Developer()
+		dev: file_reading.Developer = pickNextDeveloper(lastDev)
 
 	dev.seat_line = x
-	dev.seat_line = y
+	dev.seat_column = y
 	file_reading.floor.seats[x][y].isFilled = True
 
 	# Check Upper place
@@ -64,7 +70,7 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 			recursiveSeatPicker(x, y-1, dev)
 
 	# Check Lower place
-	if y < file_reading.floor.height - 1:
+	if y < file_reading.floor.width - 1:
 		if file_reading.floor.seats[x][y+1].type == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x][y + 1].isFilled:
 			recursiveSeatPicker(x, y+1, dev)
 
@@ -74,7 +80,7 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 			recursiveSeatPicker(x-1, y, dev)
 
 	# Check Left place
-	if x < file_reading.floor.width - 1:
+	if x < file_reading.floor.height - 1:
 		if file_reading.floor.seats[x+1][y].type == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x+1][y].isFilled:
 			recursiveSeatPicker(x+1, y, dev)
 
@@ -117,8 +123,9 @@ def main(argv):
 			elif file_reading.floor.seats[x][y].type == file_reading.SeatType.DeveloperDesk:
 				recursiveSeatPicker(x, y, None)
 			elif file_reading.floor.seats[x][y].type == file_reading.SeatType.ProjectManagerDesk:
-				pass
+				continue
 
+	
 
 
 # ______________________________________________________________________________________________________________________
