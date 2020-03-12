@@ -196,11 +196,11 @@ def write(path_output: Path):
 			if dev.seat_column == -1 and dev.seat_line == -1:
 				file.writelines(f'X\n')
 			else:
-				file.writelines(f'{dev.seat_line} {dev.seat_column}\n')
+				file.writelines(f'{dev.seat_column} {dev.seat_line}\n')
 		
 		# iterate over managers
 		for manager in managers:
 			if manager.seat_column == -1 and manager.seat_line == -1:
 				file.writelines(f'X\n')
 			else:
-				file.writelines(f'{manager.seat_line} {manager.seat_column}\n')
+				file.writelines(f'{manager.seat_column} {manager.seat_line}\n')

@@ -95,6 +95,8 @@ def main(argv):
 	input_file_list = ['Input/a_solar.txt', 'Input/b_dream.txt', 'Input/c_soup.txt', 'Input/d_maelstrom.txt', 'Input/e_igloos.txt', 'Input/f_glitch.txt']
 	output_file_list = ['Output/a_solar.txt', 'Output/b_dream.txt', 'Output/c_soup.txt', 'Output/d_maelstrom.txt', 'Output/e_igloos.txt', 'Output/f_glitch.txt']
 
+	sys.setrecursionlimit(200000)
+
 	for i in range(0, 6):
 		inputfile: str = input_file_list[i]
 		outputfile: str = output_file_list[i]
@@ -120,7 +122,6 @@ def main(argv):
 
 		for x in range(0, file_reading.floor.height):
 			for y in range(0, file_reading.floor.width):
-				print(x, y)
 				if file_reading.floor.seats[x][y].isFilled:
 					continue
 				if file_reading.floor.seats[x][y].type == file_reading.SeatType.UnavailableCell:
