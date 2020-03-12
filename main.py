@@ -41,18 +41,22 @@ from utils import *
 #  functions
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 
+def pickInitialDeveloper():
+		for d in file_reading.developers:
+			if d.seat_line == -1:
+				return d
 
 def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 	if lastDev == None:
 		# Call function to pick first developer
-		dev: file_reading.Developer = file_reading.Developer()
+		dev: file_reading.Developer = pickInitialDeveloper()
 	else:
 		# Call function to pick next developer
 		dev: file_reading.Developer = file_reading.Developer()
 
 	dev.seat_line = x
 	dev.seat_line = y
-	file_reading.floor.seats[x][y][1] = True
+	file_reading.floor.seats[x][y]
 
 	# Check Upper place
 	if y > 0:
@@ -103,15 +107,16 @@ def main(argv):
 	# ----- feed data --------------------------------------------------------------------------------------------------
 	file_reading.read(inputfile)
 
-	for w in range(0, file_reading.floor.width):
-		for h in range(0, file_reading.floor.height):
-			if file_reading.floor.seats[w][h][1]:
+	for x in range(0, file_reading.floor.height):
+		for y in range(0, file_reading.floor.width):
+			print(x, y)
+			if file_reading.floor.seats[x][y][1]:
 				continue
-			if file_reading.floor.seats[w][h][0] == file_reading.SeatType.UnavailableCell:
+			if file_reading.floor.seats[x][y][0] == file_reading.SeatType.UnavailableCell:
 				continue
-			elif file_reading.floor.seats[w][h][0] == file_reading.SeatType.DeveloperDesk:
-				pass
-			elif file_reading.floor.seats[w][h][0] == file_reading.SeatType.ProjectManagerDesk:
+			elif file_reading.floor.seats[x][y][0] == file_reading.SeatType.DeveloperDesk:
+				recursiveSeatPicker(x, y, None)
+			elif file_reading.floor.seats[x][y][0] == file_reading.SeatType.ProjectManagerDesk:
 				pass
 
 

@@ -48,17 +48,25 @@ class ProjectManager(object):
 	bonus: list
 	seat_line: int
 	seat_column: int
-	
+
+class Seat(object):
+	type: SeatType
+	isFilled: bool
+
+	def __init__(self, type: SeatType, isFilled: bool = False):
+		self.type = type
+		self.isFilled = isFilled
+
+
 class OfficeFloor(object):
 	width: int
 	height: int
-	seats: List[List[Tuple[SeatType, bool]]]  # matrix where each cell is a pair (type, is_filled)
+	seats: List[List[Seat]]  # matrix where each cell is a pair (type, is_filled)
 	
 	# def __init__(self, width: int = -1, height: int = -1, seats: List[List[Tuple[SeatType, bool]]] = [[]]):
 	# 	self.width = width
 	# 	self.height = height
 	# 	self.seats = seats
-
 
 # ______________________________________________________________________________________________________________________
 #  global variables
@@ -103,7 +111,8 @@ def read(path_input: Path):
 			for column in range(0, floor.width):
 				char: str = file.read(1)
 				seat = SeatType(char)
-				floor.seats[line][column] = (seat, False)  # is_filled initialized as empty
+				seatobj = Seat(seat)
+				floor.seats[line][column] = seatobj  # is_filled initialized as empty
 			file.read(1)  # discard \n
 
 		# ----- developers -----
