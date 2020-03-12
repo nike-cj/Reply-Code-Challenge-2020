@@ -108,12 +108,13 @@ def read(path_input: Path):
 
 		#----- developers -----
 		# read dev number
-		dev_num = int(file.readline())
+		manager_num = int(file.readline())
+		global developers, dev_per_company
 		developers = []
 		dev_per_company = {}
 		
 		# read developer details
-		for i in range(0, dev_num):
+		for i in range(0, manager_num):
 			line: str = file.readline().strip()
 			fields: list = line.split(' ')
 			
@@ -135,4 +136,29 @@ def read(path_input: Path):
 			dev_per_company[dev.company].append(dev)
 
 		#----- project managers -----
-		
+		# # read dev number
+		# manager_num = int(file.readline())
+		# global managers
+		# managers = []
+		#
+		# # read developer details
+		# for i in range(0, manager_num):
+		# 	line: str = file.readline().strip()
+		# 	fields: list = line.split(' ')
+		#
+		# 	manager: Developer = Developer()
+		# 	manager.company = fields[0]
+		# 	dev.bonus = fields[1]
+		# 	dev.seat_line = -1  # initialized as invalid index
+		# 	dev.seat_column = -1  # initialized as invalid index
+		#
+		# 	dev.skill_size = int(fields[2])
+		# 	dev.skills = [None] * dev.skill_size
+		# 	for j in range(0, dev.skill_size):
+		# 		dev.skills.append(fields[3 + j])
+		#
+		# 	# insert developer in database
+		# 	developers.append(dev)
+		# 	if dev.company not in dev_per_company:
+		# 		dev_per_company[dev.company] = []
+		# 	dev_per_company[dev.company].append(dev)
