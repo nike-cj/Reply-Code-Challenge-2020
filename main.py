@@ -49,7 +49,7 @@ import utils
 
 def main(argv):
 	# ----- read command line arguments --------------------------------------------------------------------------------
-	inputfile: str = 'input/a.txt'
+	inputfile: str = 'Input/a_solar.txt'
 	outputfile: str = 'output/a.txt'
 	try:
 		opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
