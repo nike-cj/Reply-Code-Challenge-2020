@@ -187,7 +187,7 @@ def write(path_output: Path):
 		path_output = Path(path_output)
 		
 	# check if missing directory
-	path_output.mkdir(exist_ok=True)
+	#path_output.mkdir(exist_ok=True)
 	
 	# open file
 	with path_output.open('w') as file:

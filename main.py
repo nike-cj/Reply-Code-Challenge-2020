@@ -92,40 +92,45 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 
 def main(argv):
 	# ----- read command line arguments --------------------------------------------------------------------------------
-	inputfile: str = 'Input/a_solar.txt'
-	outputfile: str = 'Output/a.txt'
-	try:
-		opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
-	except getopt.GetoptError:
-		print('main.py -i <inputfile> -o <outputfile>')
-		sys.exit(2)
-	for opt, arg in opts:
-		if opt == '-h':
+	input_file_list = ['Input/a_solar.txt', 'Input/b_dream.txt', 'Input/c_soup.txt', 'Input/d_maelstrom.txt', 'Input/e_igloos.txt', 'Input/f_glitch.txt']
+	output_file_list = ['Output/a.txt', 'Output/b.txt', 'Output/c.txt', 'Output/d.txt', 'Output/e.txt', 'Output/f.txt']
+
+	for i in range(0, 6):
+		inputfile: str = input_file_list[i]
+		outputfile: str = output_file_list[i]
+
+		try:
+			opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
+		except getopt.GetoptError:
 			print('main.py -i <inputfile> -o <outputfile>')
-			sys.exit()
-		elif opt in ("-i", "--ifile"):
-			inputfile = arg
-		elif opt in ("-o", "--ofile"):
-			outputfile = arg
-	print(f'Input file is {inputfile}')
-	print(f'Output file is {outputfile}')
+			sys.exit(2)
+		for opt, arg in opts:
+			if opt == '-h':
+				print('main.py -i <inputfile> -o <outputfile>')
+				sys.exit()
+			elif opt in ("-i", "--ifile"):
+				inputfile = arg
+			elif opt in ("-o", "--ofile"):
+				outputfile = arg
+		print(f'Input file is {inputfile}')
+		print(f'Output file is {outputfile}')
 
-	# ----- feed data --------------------------------------------------------------------------------------------------
-	file_reading.read(inputfile)
+		# ----- feed data --------------------------------------------------------------------------------------------------
+		file_reading.read(inputfile)
 
-	for x in range(0, file_reading.floor.height):
-		for y in range(0, file_reading.floor.width):
-			print(x, y)
-			if file_reading.floor.seats[x][y].isFilled:
-				continue
-			if file_reading.floor.seats[x][y].type == file_reading.SeatType.UnavailableCell:
-				continue
-			elif file_reading.floor.seats[x][y].type == file_reading.SeatType.DeveloperDesk:
-				recursiveSeatPicker(x, y, None)
-			elif file_reading.floor.seats[x][y].type == file_reading.SeatType.ProjectManagerDesk:
-				continue
+		for x in range(0, file_reading.floor.height):
+			for y in range(0, file_reading.floor.width):
+				print(x, y)
+				if file_reading.floor.seats[x][y].isFilled:
+					continue
+				if file_reading.floor.seats[x][y].type == file_reading.SeatType.UnavailableCell:
+					continue
+				elif file_reading.floor.seats[x][y].type == file_reading.SeatType.DeveloperDesk:
+					recursiveSeatPicker(x, y, None)
+				elif file_reading.floor.seats[x][y].type == file_reading.SeatType.ProjectManagerDesk:
+					continue
 
-	file_reading.write(outputfile)
+		file_reading.write(outputfile)
 
 
 # ______________________________________________________________________________________________________________________
