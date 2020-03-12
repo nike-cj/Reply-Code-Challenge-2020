@@ -185,6 +185,9 @@ def write(path_output: Path):
 	# check input type
 	if type(path_output) == str:
 		path_output = Path(path_output)
+		
+	# check if missing directory
+	#if
 	
 	# open file
 	with path_output.open('w') as file:
@@ -194,3 +197,10 @@ def write(path_output: Path):
 				file.writelines(f'X\n')
 			else:
 				file.writelines(f'{dev.seat_line} {dev.seat_column}\n')
+		
+		# iterate over managers
+		for manager in managers:
+			if manager.seat_column == -1 and manager.seat_line == -1:
+				file.writelines(f'X\n')
+			else:
+				file.writelines(f'{manager.seat_line} {manager.seat_column}\n')
