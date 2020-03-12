@@ -85,7 +85,7 @@ def read(path_input: Path):
 	
 	# open file
 	with path_input.open('r') as file:
-		#----- seat disposition -----
+		# ----- seat disposition -----
 		# read W and H
 		first_line: str = file.readline()
 		w = first_line.split(' ')[0]
@@ -106,7 +106,7 @@ def read(path_input: Path):
 				floor.seats[line][column] = (seat, False)  # is_filled initialized as empty
 			file.read(1)  # discard \n
 
-		#----- developers -----
+		# ----- developers -----
 		# read dev number
 		manager_num = int(file.readline())
 		global developers, dev_per_company
@@ -135,30 +135,26 @@ def read(path_input: Path):
 				dev_per_company[dev.company] = []
 			dev_per_company[dev.company].append(dev)
 
-		#----- project managers -----
-		# # read dev number
-		# manager_num = int(file.readline())
-		# global managers
-		# managers = []
-		#
-		# # read developer details
-		# for i in range(0, manager_num):
-		# 	line: str = file.readline().strip()
-		# 	fields: list = line.split(' ')
-		#
-		# 	manager: Developer = Developer()
-		# 	manager.company = fields[0]
-		# 	dev.bonus = fields[1]
-		# 	dev.seat_line = -1  # initialized as invalid index
-		# 	dev.seat_column = -1  # initialized as invalid index
-		#
-		# 	dev.skill_size = int(fields[2])
-		# 	dev.skills = [None] * dev.skill_size
-		# 	for j in range(0, dev.skill_size):
-		# 		dev.skills.append(fields[3 + j])
-		#
-		# 	# insert developer in database
-		# 	developers.append(dev)
-		# 	if dev.company not in dev_per_company:
-		# 		dev_per_company[dev.company] = []
-		# 	dev_per_company[dev.company].append(dev)
+		# ----- project managers -----
+		# read dev number
+		manager_num = int(file.readline())
+		global managers
+		managers = []
+		
+		# read developer details
+		for i in range(0, manager_num):
+			line: str = file.readline().strip()
+			fields: list = line.split(' ')
+			
+			manager: ProjectManager = ProjectManager()
+			manager.company = fields[0]
+			manager.bonus = fields[1]
+			
+			# insert project manager in database
+			managers.append(manager)
+
+		# ----- sort -----
+		for entry in dev_per_company.items():
+			key: str = entry[0]
+			value: List[Developer] = entry[1]
+			value.sort(key=lambda x: x.bonus)
