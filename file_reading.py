@@ -52,11 +52,12 @@ class ProjectManager(object):
 class Seat(object):
 	type: SeatType
 	isFilled: bool
+	owner: object
 
-	def __init__(self, type: SeatType, isFilled: bool = False):
+	def __init__(self, type: SeatType, isFilled: bool = False, owner: object = None):
 		self.type = type
 		self.isFilled = isFilled
-
+		self.owner = owner
 
 class OfficeFloor(object):
 	width: int
@@ -82,7 +83,8 @@ dev_per_company: Dict[str, List[Developer]]
 dev_by_bonus: List[Developer]
 dev_by_num_skills: List[Developer]
 managers: List[ProjectManager]
-
+man_by_bonus: List[ProjectManager]
+man_per_company: Dict[str, List[ProjectManager]]
 
 # ______________________________________________________________________________________________________________________
 #  functions
@@ -126,7 +128,7 @@ def read(path_input: Path):
 		global developers, dev_per_company
 		developers = []
 		dev_per_company = {}
-		
+
 		# read developer details
 		for i in range(0, manager_num):
 			line: str = file.readline().strip()
@@ -152,8 +154,9 @@ def read(path_input: Path):
 		# ----- project managers -----
 		# read dev number
 		manager_num = int(file.readline())
-		global managers
+		global managers, man_per_company
 		managers = []
+		man_per_company = {}
 		
 		# read developer details
 		for i in range(0, manager_num):
@@ -166,19 +169,31 @@ def read(path_input: Path):
 			
 			# insert project manager in database
 			managers.append(manager)
+			if manager.company not in man_per_company:
+				man_per_company[manager.company] = []
+			man_per_company[manager.company].append(manager)
 
 		# ----- sort -----
 		for entry in dev_per_company.items():
 			key: str = entry[0]
 			value: List[Developer] = entry[1]
-			value.sort(key=lambda x: x.bonus)
-		
+			value.sort(key=lambda x: x.bonus, reverse=True)
+
+		for entry in man_per_company.items():
+			key: str = entry[0]
+			value: List[ProjectManager] = entry[1]
+			value.sort(key=lambda x: x.bonus, reverse=True)
+
 		global dev_by_bonus, dev_by_num_skills
 		dev_by_bonus = developers.copy()
 		dev_by_bonus.sort(key=lambda x: x.bonus, reverse=True)
 		
 		dev_by_num_skills = developers.copy()
 		dev_by_num_skills.sort(key=lambda x: x.skill_size, reverse=True)
+
+		global man_by_bonus
+		man_by_bonus = managers.copy()
+		man_by_bonus.sort(key=lambda x: x.bonus, reverse=True)
 
 
 def write(path_output: Path):
@@ -196,11 +211,11 @@ def write(path_output: Path):
 			if dev.seat_column == -1 and dev.seat_line == -1:
 				file.writelines(f'X\n')
 			else:
-				file.writelines(f'{dev.seat_line} {dev.seat_column}\n')
+				file.writelines(f'{dev.seat_column} {dev.seat_line}\n')
 		
 		# iterate over managers
 		for manager in managers:
 			if manager.seat_column == -1 and manager.seat_line == -1:
 				file.writelines(f'X\n')
 			else:
-				file.writelines(f'{manager.seat_line} {manager.seat_column}\n')
+				file.writelines(f'{manager.seat_column} {manager.seat_line}\n')

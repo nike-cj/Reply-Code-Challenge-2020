@@ -63,6 +63,7 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 	dev.seat_line = x
 	dev.seat_column = y
 	file_reading.floor.seats[x][y].isFilled = True
+	file_reading.floor.seats[x][y].owner = dev
 
 	# Check Upper place
 	if y > 0:
@@ -86,6 +87,46 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 
 	return
 
+def pickManager(x: int, y: int):
+	list_man = []
+	list_score = []
+
+	# Check Upper place
+	if y > 0:
+		if file_reading.floor.seats[x][y - 1].type != file_reading.SeatType.UnavailableCell and file_reading.floor.seats[x][y - 1].isFilled:
+			if file_reading.man_per_company[file_reading.floor.seats[x][y - 1].owner.company] in file_reading.man_per_company:
+				list_man.append(file_reading.man_per_company[file_reading.floor.seats[x][y - 1].owner.company])
+
+
+	# Check Lower place
+	if y < file_reading.floor.width - 1:
+		if file_reading.floor.seats[x][y + 1].type != file_reading.SeatType.UnavailableCell and file_reading.floor.seats[x][y + 1].isFilled:
+			list_dev.append(file_reading.floor.seats[x][y + 1].owner)
+
+	# Check Right place
+	if x > 0:
+		if file_reading.floor.seats[x - 1][y].type != file_reading.SeatType.UnavailableCell and file_reading.floor.seats[x - 1][y].isFilled:
+			list_dev.append(file_reading.floor.seats[x - 1][y].owner)
+
+	# Check Left place
+	if x < file_reading.floor.height - 1:
+		if file_reading.floor.seats[x + 1][y].type != file_reading.SeatType.UnavailableCell and file_reading.floor.seats[x + 1][y].isFilled:
+			list_dev.append(file_reading.floor.seats[x + 1][y].owner)
+
+	if len(list_dev) == 0:
+		for m in reversed(file_reading.man_by_bonus):
+			if m.seat_line == -1:
+				file_reading.floor.seats[x][y].isFilled = True
+				file_reading.floor.seats[x][y].owner = m
+				return
+
+	list_same_company = []
+	for d in list_dev:
+		for m in file_reading.man_per_company:
+		list_same_company.append(file_reading.man_per_company[d.company])
+
+	return
+
 # ______________________________________________________________________________________________________________________
 #  main function
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -93,7 +134,9 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 def main(argv):
 	# ----- read command line arguments --------------------------------------------------------------------------------
 	input_file_list = ['Input/a_solar.txt', 'Input/b_dream.txt', 'Input/c_soup.txt', 'Input/d_maelstrom.txt', 'Input/e_igloos.txt', 'Input/f_glitch.txt']
-	output_file_list = ['Output/a.txt', 'Output/b.txt', 'Output/c.txt', 'Output/d.txt', 'Output/e.txt', 'Output/f.txt']
+	output_file_list = ['Output/a_solar.txt', 'Output/b_dream.txt', 'Output/c_soup.txt', 'Output/d_maelstrom.txt', 'Output/e_igloos.txt', 'Output/f_glitch.txt']
+
+	sys.setrecursionlimit(200000)
 
 	for i in range(0, 6):
 		inputfile: str = input_file_list[i]
@@ -120,7 +163,6 @@ def main(argv):
 
 		for x in range(0, file_reading.floor.height):
 			for y in range(0, file_reading.floor.width):
-				print(x, y)
 				if file_reading.floor.seats[x][y].isFilled:
 					continue
 				if file_reading.floor.seats[x][y].type == file_reading.SeatType.UnavailableCell:
@@ -128,7 +170,7 @@ def main(argv):
 				elif file_reading.floor.seats[x][y].type == file_reading.SeatType.DeveloperDesk:
 					recursiveSeatPicker(x, y, None)
 				elif file_reading.floor.seats[x][y].type == file_reading.SeatType.ProjectManagerDesk:
-					continue
+					pickManager(x, y)
 
 		file_reading.write(outputfile)
 
@@ -137,8 +179,6 @@ def main(argv):
 #  entry point
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 if __name__ == '__main__':
-	try:
-		main(sys.argv[1:])
-	except Exception as e:
-		print(str(e))
+
+	main(sys.argv[1:])
 	exit(0)
