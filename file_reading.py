@@ -31,22 +31,28 @@ class SeatType(Enum):
 # ______________________________________________________________________________________________________________________
 #  classes
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-@dataclass
+#@dataclass
 class Developer(object):
 	company: str
 	bonus: list
-	skills: set
+	skill_size: int
+	skills: list
 	seat_line: int
 	seat_column: int
 	
-@dataclass
+	def __init__(self, width: int = -1, height: int = -1, seats: List[List[Tuple[SeatType, bool]]] = [[]]):
+		self.width = width
+		self.height = height
+		self.seats = seats
+	
+#@dataclass
 class ProjectManager(object):
 	company: str
 	bonus: list
 	seat_line: int
 	seat_column: int
 	
-@dataclass
+#@dataclass
 class OfficeFloor(object):
 	width: int
 	height: int
@@ -69,8 +75,7 @@ path_output: Path = Path.cwd()
 floor: OfficeFloor
 developers: List[Developer]
 dev_per_company: Dict[str, List[Developer]]
-managers: List['ProjectManager']
-
+managers: List[ProjectManager]
 
 
 # ______________________________________________________________________________________________________________________
@@ -107,9 +112,9 @@ def read(path_input: Path):
 
 		#----- developers -----
 		# read dev number
-		char = file.readline()
-		dev_num = int(char)
+		dev_num = int(file.readline())
 		developers = [None] * dev_num
+		dev_per_company = {}
 		
 		# read developer details
 		for i in range(0, dev_num):

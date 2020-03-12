@@ -11,8 +11,8 @@ from typing import List, Tuple
 from enum import Enum
 
 # ----- custom libraries -----------------------------------------------------------------------------------------------
-import file_reading
-import utils
+from file_reading import *
+from utils import *
 
 # ______________________________________________________________________________________________________________________
 #  constants
@@ -68,7 +68,7 @@ def main(argv):
 	print(f'Output file is {outputfile}')
 
 	# ----- feed data --------------------------------------------------------------------------------------------------
-	file_reading.read(inputfile)
+	read(inputfile)
 
 
 # ______________________________________________________________________________________________________________________
