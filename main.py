@@ -93,7 +93,7 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 def main(argv):
 	# ----- read command line arguments --------------------------------------------------------------------------------
 	inputfile: str = 'Input/a_solar.txt'
-	outputfile: str = 'Output/a_solar.txt'
+	outputfile: str = 'Output/a.txt'
 	try:
 		opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
 	except getopt.GetoptError:
@@ -125,7 +125,7 @@ def main(argv):
 			elif file_reading.floor.seats[x][y].type == file_reading.SeatType.ProjectManagerDesk:
 				continue
 
-	
+	file_reading.write(outputfile)
 
 
 # ______________________________________________________________________________________________________________________
