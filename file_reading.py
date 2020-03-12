@@ -35,8 +35,8 @@ class Developer(object):
 	bonus: list
 	skill_size: int
 	skills: list
-	seat_line: int
-	seat_column: int
+	seat_line: int = -1
+	seat_column: int = -1
 	
 	# def __init__(self, width: int = -1, height: int = -1, seats: List[List[Tuple[SeatType, bool]]] = [[]]):
 	# 	self.width = width
@@ -45,9 +45,9 @@ class Developer(object):
 	
 class ProjectManager(object):
 	company: str
-	bonus: list
-	seat_line: int
-	seat_column: int
+	bonus: list = 0
+	seat_line: int = -1
+	seat_column: int = -1
 
 class Seat(object):
 	type: SeatType
@@ -187,7 +187,7 @@ def write(path_output: Path):
 		path_output = Path(path_output)
 		
 	# check if missing directory
-	#if
+	path_output.mkdir(exist_ok=True)
 	
 	# open file
 	with path_output.open('w') as file:
