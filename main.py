@@ -56,26 +56,26 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 
 	dev.seat_line = x
 	dev.seat_line = y
-	file_reading.floor.seats[x][y]
+	file_reading.floor.seats[x][y].isFilled = True
 
 	# Check Upper place
 	if y > 0:
-		if file_reading.floor.seats[x][y-1][0] == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x][y-1][1]:
+		if file_reading.floor.seats[x][y-1].type == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x][y-1].isFilled:
 			recursiveSeatPicker(x, y-1, dev)
 
 	# Check Lower place
 	if y < file_reading.floor.height - 1:
-		if file_reading.floor.seats[x][y+1][0] == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x][y + 1][1]:
+		if file_reading.floor.seats[x][y+1].type == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x][y + 1].isFilled:
 			recursiveSeatPicker(x, y+1, dev)
 
 	# Check Right place
 	if x > 0:
-		if file_reading.floor.seats[x-1][y][0] == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x -1][y][1]:
+		if file_reading.floor.seats[x-1][y].type == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x -1][y].isFilled:
 			recursiveSeatPicker(x-1, y, dev)
 
 	# Check Left place
 	if x < file_reading.floor.width - 1:
-		if file_reading.floor.seats[x+1][y][0] == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x+1][y][1]:
+		if file_reading.floor.seats[x+1][y].type == file_reading.SeatType.DeveloperDesk and not file_reading.floor.seats[x+1][y].isFilled:
 			recursiveSeatPicker(x+1, y, dev)
 
 	return
@@ -110,13 +110,13 @@ def main(argv):
 	for x in range(0, file_reading.floor.height):
 		for y in range(0, file_reading.floor.width):
 			print(x, y)
-			if file_reading.floor.seats[x][y][1]:
+			if file_reading.floor.seats[x][y].isFilled:
 				continue
-			if file_reading.floor.seats[x][y][0] == file_reading.SeatType.UnavailableCell:
+			if file_reading.floor.seats[x][y].type == file_reading.SeatType.UnavailableCell:
 				continue
-			elif file_reading.floor.seats[x][y][0] == file_reading.SeatType.DeveloperDesk:
+			elif file_reading.floor.seats[x][y].type == file_reading.SeatType.DeveloperDesk:
 				recursiveSeatPicker(x, y, None)
-			elif file_reading.floor.seats[x][y][0] == file_reading.SeatType.ProjectManagerDesk:
+			elif file_reading.floor.seats[x][y].type == file_reading.SeatType.ProjectManagerDesk:
 				pass
 
 
