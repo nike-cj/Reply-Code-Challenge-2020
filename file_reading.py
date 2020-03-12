@@ -179,7 +179,6 @@ def read(path_input: Path):
 		
 		dev_by_num_skills = developers.copy()
 		dev_by_num_skills.sort(key=lambda x: x.skill_size, reverse=True)
-		
 
 
 def write(path_output: Path):
@@ -188,7 +187,7 @@ def write(path_output: Path):
 		path_output = Path(path_output)
 	
 	# open file
-	with path_input.open('w') as file:
+	with path_output.open('w') as file:
 		# iterate over developers
 		for dev in developers:
 			if dev.seat_column == -1 and dev.seat_line == -1:
