@@ -93,7 +93,7 @@ def recursiveSeatPicker(x: int, y: int, lastDev: file_reading.Developer):
 def main(argv):
 	# ----- read command line arguments --------------------------------------------------------------------------------
 	input_file_list = ['Input/a_solar.txt', 'Input/b_dream.txt', 'Input/c_soup.txt', 'Input/d_maelstrom.txt', 'Input/e_igloos.txt', 'Input/f_glitch.txt']
-	output_file_list = ['Output/a.txt', 'Output/b.txt', 'Output/c.txt', 'Output/d.txt', 'Output/e.txt', 'Output/f.txt']
+	output_file_list = ['Output/a_solar.txt', 'Output/b_dream.txt', 'Output/c_soup.txt', 'Output/d_maelstrom.txt', 'Output/e_igloos.txt', 'Output/f_glitch.txt']
 
 	for i in range(0, 6):
 		inputfile: str = input_file_list[i]
