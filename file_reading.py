@@ -175,10 +175,10 @@ def read(path_input: Path):
 		
 		global dev_by_bonus, dev_by_num_skills
 		dev_by_bonus = developers.copy()
-		dev_by_bonus.sort(key=lambda x: x.bonus)
+		dev_by_bonus.sort(key=lambda x: x.bonus, reverse=True)
 		
 		dev_by_num_skills = developers.copy()
-		dev_by_num_skills.sort(key=lambda x: x.skill_size)
+		dev_by_num_skills.sort(key=lambda x: x.skill_size, reverse=True)
 		
 
 
@@ -194,4 +194,4 @@ def write(path_output: Path):
 			if dev.seat_column == -1 and dev.seat_line == -1:
 				file.writelines(f'X\n')
 			else:
-				file.writelines(f'{dev.seat_colimn} {dev.seat_line}\n')
+				file.writelines(f'{dev.seat_line} {dev.seat_column}\n')
