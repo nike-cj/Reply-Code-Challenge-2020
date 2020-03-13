@@ -94,36 +94,54 @@ def pickManager(x: int, y: int):
 	# Check Upper place
 	if y > 0:
 		if file_reading.floor.seats[x][y - 1].type != file_reading.SeatType.UnavailableCell and file_reading.floor.seats[x][y - 1].isFilled:
-			if file_reading.man_per_company[file_reading.floor.seats[x][y - 1].owner.company] in file_reading.man_per_company:
-				list_man.append(file_reading.man_per_company[file_reading.floor.seats[x][y - 1].owner.company])
+			if file_reading.floor.seats[x][y - 1].owner.company in file_reading.man_per_company:
+				for v in file_reading.man_per_company[file_reading.floor.seats[x][y - 1].owner.company]:
+					if v.seat_line == -1:
+						list_man.append(v)
+						break
 
 
 	# Check Lower place
 	if y < file_reading.floor.width - 1:
 		if file_reading.floor.seats[x][y + 1].type != file_reading.SeatType.UnavailableCell and file_reading.floor.seats[x][y + 1].isFilled:
-			list_dev.append(file_reading.floor.seats[x][y + 1].owner)
+			if file_reading.floor.seats[x][y + 1].owner.company in file_reading.man_per_company:
+				for v in file_reading.man_per_company[file_reading.floor.seats[x][y + 1].owner.company]:
+					if v.seat_line == -1:
+						list_man.append(v)
+						break
 
 	# Check Right place
 	if x > 0:
 		if file_reading.floor.seats[x - 1][y].type != file_reading.SeatType.UnavailableCell and file_reading.floor.seats[x - 1][y].isFilled:
-			list_dev.append(file_reading.floor.seats[x - 1][y].owner)
+			if file_reading.floor.seats[x - 1][y].owner.company in file_reading.man_per_company:
+				for v in file_reading.man_per_company[file_reading.floor.seats[x - 1][y].owner.company]:
+					if v.seat_line == -1:
+						list_man.append(v)
+						break
 
 	# Check Left place
 	if x < file_reading.floor.height - 1:
 		if file_reading.floor.seats[x + 1][y].type != file_reading.SeatType.UnavailableCell and file_reading.floor.seats[x + 1][y].isFilled:
-			list_dev.append(file_reading.floor.seats[x + 1][y].owner)
+			if file_reading.floor.seats[x + 1][y].owner.company in file_reading.man_per_company:
+				for v in file_reading.man_per_company[file_reading.floor.seats[x + 1][y].owner.company]:
+					if v.seat_line == -1:
+						list_man.append(v)
+						break
 
-	if len(list_dev) == 0:
+	if len(list_man) == 0:
 		for m in reversed(file_reading.man_by_bonus):
 			if m.seat_line == -1:
 				file_reading.floor.seats[x][y].isFilled = True
 				file_reading.floor.seats[x][y].owner = m
+				m.seat_line = x
+				m.seat_column = y
 				return
 
-	list_same_company = []
-	for d in list_dev:
-		for m in file_reading.man_per_company:
-		list_same_company.append(file_reading.man_per_company[d.company])
+	else:
+		file_reading.floor.seats[x][y].isFilled = True
+		file_reading.floor.seats[x][y].owner = list_man[0]
+		list_man[0].seat_line = x
+		list_man[0].seat_column = y
 
 	return
 
